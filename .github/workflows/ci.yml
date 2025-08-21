@@ -1,0 +1,34 @@
+name: Task 2 CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+
+    env:
+      TEST_USER_EMAIL: "test@example.com"
+      TEST_USER_PASSWORD: "password"
+      BASE_URL: "http://localhost:5000"
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Task 2 CI
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test --configuration Release --no-build
